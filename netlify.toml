@@ -1,0 +1,14 @@
+# Netlify Configuration for JARVIS Voice Assistant Web Platform
+
+[build]
+  publish = "frontend"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
