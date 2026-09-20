@@ -1,10 +1,12 @@
 # 🤖 JARVIS — Full-Stack Real-Time Voice Assistant & AI Platform
 
+[![Netlify Live Demo](https://img.shields.io/badge/Live_Demo-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://voice-assistant-using-python-web.netlify.app/)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Web Speech API](https://img.shields.io/badge/Web_Speech_API-HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
+> 🚀 **Live Demo:** [https://voice-assistant-using-python-web.netlify.app/](https://voice-assistant-using-python-web.netlify.app/)  
 > **JARVIS** is an industry-grade, full-stack voice assistant and productivity platform inspired by Iron Man's Stark Industries AI. Engineered with an asynchronous **Python (FastAPI)** backend and a futuristic cybernetic HUD web frontend utilizing HTML5 **Web Speech API** and **Web Audio API** canvas visualizer.
 
 ---
