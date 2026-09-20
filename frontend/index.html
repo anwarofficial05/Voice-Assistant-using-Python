@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JARVIS — Full-Stack Voice Assistant & AI Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <!-- Fallback relative link if opened directly via file:// -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="cyber-theme">
+  <!-- Background Grid & Glow Effects -->
+  <div class="bg-grid"></div>
+  <div class="glow-orb glow-top-left"></div>
+  <div class="glow-orb glow-bottom-right"></div>
+
+  <!-- Top Navigation Header -->
+  <header class="hud-header">
+    <div class="brand-group">
+      <div class="arc-icon">
+        <div class="arc-inner-ring"></div>
+        <div class="arc-dot"></div>
+      </div>
+      <div>
+        <h1 class="brand-title">JARVIS <span class="brand-sub">AI CORE</span></h1>
+        <p class="brand-tagline">Full-Stack Real-Time Voice Assistant</p>
+      </div>
+    </div>
+
+    <div class="header-status-group">
+      <div class="status-badge" id="serverStatusBadge">
+        <span class="status-indicator live"></span>
+        <span id="serverStatusText">ONLINE [FASTAPI]</span>
+      </div>
+      <button class="hud-btn btn-secondary" id="btnOpenResume" title="View Project Architecture & Resume Bullets">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        <span>Resume Showcase</span>
+      </button>
+      <button class="hud-btn btn-secondary" id="btnOpenCommands" title="Browse all 50+ voice commands">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <span>Commands (50+)</span>
+      </button>
+      <div class="voice-selector-wrap">
+        <label for="voiceSelect">VOICE:</label>
+        <select id="voiceSelect" class="hud-select" title="Select speech synthesis voice"></select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Layout -->
+  <main class="dashboard-grid">
+    <!-- Left / Center Column: Voice HUD & Visualizer -->
+    <section class="hud-card center-stage">
+      <div class="hud-corner top-left"></div>
+      <div class="hud-corner top-right"></div>
+      <div class="hud-corner bottom-left"></div>
+      <div class="hud-corner bottom-right"></div>
+
+      <!-- Core Status Header -->
+      <div class="core-header">
+        <div class="hud-meta">
+          <span class="meta-label">SYSTEM PROTOCOL</span>
+          <span class="meta-val" id="protocolStatus">IDLE // STANDBY</span>
+        </div>
+        <div class="hud-meta">
+          <span class="meta-label">ENERGY PROFILE</span>
+          <span class="meta-val">MAX EFFICIENCY</span>
+        </div>
+      </div>
+
+      <!-- Holographic Arc Reactor Orb -->
+      <div class="reactor-container">
+        <div class="reactor-ring outer-ring"></div>
+        <div class="reactor-ring middle-ring"></div>
+        <div class="reactor-core" id="reactorCore">
+          <div class="core-waves"></div>
+          <div class="core-glow"></div>
+          <div class="core-center-icon">
+            <svg id="micStateIcon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Audio Frequency Waveform Canvas -->
+      <div class="visualizer-wrapper">
+        <canvas id="waveformCanvas" width="500" height="70"></canvas>
+        <div class="live-subtitles" id="liveSubtitles">Click the microphone or press Space to speak...</div>
+      </div>
+
+      <!-- Central Action Controls -->
+      <div class="mic-controls">
+        <button class="primary-mic-btn" id="btnToggleMic" title="Click to listen or press Spacebar">
+          <div class="mic-btn-glow"></div>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+          <span id="micButtonText">INITIATE VOICE</span>
+        </button>
+        <button class="hud-icon-btn" id="btnVoiceMute" title="Toggle Assistant Audio Voice">
+          <svg id="speakerIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+        </button>
+      </div>
+
+      <!-- Text Input Fallback Bar (Ideal for Recruiters) -->
+      <form class="command-input-form" id="commandForm">
+        <div class="input-glow-box">
+          <input type="text" id="textCommandInput" placeholder="Ask Jarvis anything or pick a quick chip below..." autocomplete="off">
+          <button type="submit" class="hud-submit-btn" title="Send Command">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </div>
+      </form>
+
+      <!-- Quick Command Prompt Chips (One-Click Testing) -->
+      <div class="quick-chips-section">
+        <span class="chips-label">QUICK TEST PROMPTS:</span>
+        <div class="chips-container" id="quickChipsContainer">
+          <button class="chip-btn" data-query="Explain Quantum Computing">💡 Quantum Computing</button>
+          <button class="chip-btn" data-query="Generate code for Binary Search">💻 Binary Search Code</button>
+          <button class="chip-btn" data-query="Price of Bitcoin">🪙 BTC Price</button>
+          <button class="chip-btn" data-query="Start Pomodoro">⏳ Start Pomodoro</button>
+          <button class="chip-btn" data-query="Guided breathing">🧘 Guided Breathing</button>
+          <button class="chip-btn" data-query="System telemetry">📊 System Telemetry</button>
+          <button class="chip-btn" data-query="Tell me a joke">😂 Developer Joke</button>
+          <button class="chip-btn" data-query="Convert 100 USD to EUR">💱 100 USD to EUR</button>
+          <button class="chip-btn" data-query="Play lofi">🎵 Play Lofi Beats</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Column: Conversation Stream & System Telemetry -->
+    <aside class="hud-sidebar">
+      <!-- Live Telemetry Card -->
+      <div class="hud-card telemetry-card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            <span>SYSTEM TELEMETRY HUD</span>
+          </div>
+          <button class="hud-mini-btn" id="btnRefreshTelemetry" title="Refresh Telemetry">↻</button>
+        </div>
+        <div class="telemetry-grid">
+          <div class="gauge-item">
+            <div class="gauge-header">
+              <span>CPU USAGE</span>
+              <span id="cpuPercentVal">--%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="cpuFill" style="width: 0%"></div></div>
+          </div>
+          <div class="gauge-item">
+            <div class="gauge-header">
+              <span>MEMORY (RAM)</span>
+              <span id="ramPercentVal">--%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="ramFill" style="width: 0%"></div></div>
+          </div>
+          <div class="gauge-item">
+            <div class="gauge-header">
+              <span>DISK STORAGE</span>
+              <span id="diskPercentVal">--%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="diskFill" style="width: 0%"></div></div>
+          </div>
+          <div class="meta-row">
+            <span class="meta-tag" id="osPlatformTag">PLATFORM: Windows</span>
+            <span class="meta-tag" id="networkLatencyTag">LATENCY: ~18ms</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Interaction Transcript Feed -->
+      <div class="hud-card chat-feed-card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span>INTERACTION STREAM</span>
+          </div>
+          <button class="hud-mini-btn" id="btnClearFeed" title="Clear Conversation Feed">Clear</button>
+        </div>
+        <div class="chat-feed-scroll" id="chatFeed">
+          <!-- Initial welcome greeting card -->
+          <div class="message-card jarvis-msg">
+            <div class="msg-meta">
+              <span class="sender-tag">JARVIS CORE</span>
+              <span class="msg-time">ONLINE</span>
+            </div>
+            <div class="msg-body">
+              Systems operational. I am ready to process voice or text queries. Ask me about software architecture, algorithms, crypto, timers, or system telemetry.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Notes & Tasks Widget -->
+      <div class="hud-card notes-card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+            <span>TASK & NOTES DRAWER</span>
+          </div>
+          <button class="hud-mini-btn" id="btnExportNotes" title="Export notes as Markdown">Export</button>
+        </div>
+        <div class="task-list-container" id="taskListContainer">
+          <div class="task-item">
+            <span class="task-bullet">▸</span>
+            <span class="task-text">Voice Assistant ready for resume presentation</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Guided Breathing / Pomodoro Modal Overlay -->
+  <div class="modal-overlay hidden" id="focusModalOverlay">
+    <div class="focus-modal-content">
+      <button class="modal-close-btn" id="btnCloseFocusModal">&times;</button>
+      <h3 class="focus-modal-title" id="focusModalTitle">4-7-8 Guided Breathing</h3>
+      <div class="breathing-circle-wrapper" id="breathingCircleWrapper">
+        <div class="breathing-circle" id="breathingCircle">
+          <span id="breathingInstruction">INHALE</span>
+        </div>
+      </div>
+      <div class="focus-timer-clock hidden" id="focusTimerClock">25:00</div>
+      <p class="focus-modal-sub" id="focusModalSub">Calm your autonomic nervous system and enhance focus.</p>
+    </div>
+  </div>
+
+  <!-- Resume Showcase & Architecture Modal -->
+  <div class="modal-overlay hidden" id="resumeModalOverlay">
+    <div class="resume-modal-content">
+      <button class="modal-close-btn" id="btnCloseResumeModal">&times;</button>
+      <div class="resume-header">
+        <span class="badge-accent">RESUME SHOWCASE</span>
+        <h2>JARVIS Full-Stack Voice AI Assistant</h2>
+        <p class="resume-sub">High-Performance Asynchronous Python (FastAPI) & Web Speech Platform</p>
+      </div>
+
+      <div class="resume-tabs-nav">
+        <button class="tab-btn active" data-tab="tab-bullets">Resume Bullet Points</button>
+        <button class="tab-btn" data-tab="tab-arch">System Architecture</button>
+        <button class="tab-btn" data-tab="tab-stack">Tech Stack Matrix</button>
+      </div>
+
+      <!-- Tab 1: Ready-to-copy bullet points -->
+      <div class="tab-content active" id="tab-bullets">
+        <div class="bullet-card">
+          <div class="bullet-card-header">
+            <h4>Ready-To-Use Bullet Points for Resume / LinkedIn</h4>
+            <button class="copy-bullet-btn" id="btnCopyBullets">Copy All Bullets</button>
+          </div>
+          <ul class="bullet-list" id="bulletPointsText">
+            <li><strong>Architected and deployed</strong> a full-stack real-time Voice AI platform using <strong>Python (FastAPI, Uvicorn)</strong> and HTML5 <strong>Web Speech & Web Audio APIs</strong>, executing 50+ modular intents across 12 domains with sub-200ms dispatch latency.</li>
+            <li><strong>Engineered dual-engine speech processing</strong> combining browser-native speech recognition with server-side natural language intent classification and contextual fallback recovery.</li>
+            <li><strong>Implemented real-time hardware telemetry and process monitoring</strong> leveraging <strong>psutil</strong> and asynchronous RESTful microservices, streaming CPU, RAM, and network metrics to a custom HUD canvas visualizer.</li>
+            <li><strong>Built developer productivity features</strong> including automated algorithmic code generation (Python/JavaScript), cryptographic token generation, regex helpers, Pomodoro timers, and live financial market tracking via CoinGecko API.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tab 2: Architecture -->
+      <div class="tab-content" id="tab-arch">
+        <div class="arch-box">
+          <pre class="arch-diagram">
++-------------------------------------------------------------+
+|                  BROWSER CLIENT LAYER                      |
+|  - Web Speech API (webkitSpeechRecognition & Synthesis)     |
+|  - Web Audio API (AnalyserNode -> HTML5 Canvas Visualizer)  |
+|  - Iron Man / HUD Cyberpunk Glassmorphism Interface         |
++------------------------------+------------------------------+
+                               |
+               REST / WebSocket | JSON (sub-200ms latency)
+                               v
++-------------------------------------------------------------+
+|                  FASTAPI ASYNC BACKEND                      |
+|  - Intent Classifier & Keyword Dispatcher (assistant.py)   |
+|  - 12 Categorized Handlers (AI, Dev, Telemetry, Finance...) |
+|  - Hardware Telemetry Monitor (psutil)                      |
+|  - Persistent Notes & Task Engine (JSON storage)            |
++------------------------------+------------------------------+
+                               |
+                               v
++-------------------------------------------------------------+
+|               EXTERNAL APIS & SYSTEM TOOLS                  |
+|  - CoinGecko Real-time API  |  Wikipedia Knowledge Base     |
+|  - OpenWeatherMap API       |  Local OS Automation (psutil) |
++-------------------------------------------------------------+
+          </pre>
+        </div>
+      </div>
+
+      <!-- Tab 3: Tech Stack -->
+      <div class="tab-content" id="tab-stack">
+        <div class="stack-grid">
+          <div class="stack-item">
+            <span class="stack-category">Backend Core</span>
+            <span class="stack-tech">Python 3.12, FastAPI, Uvicorn, Pydantic, Asyncio</span>
+          </div>
+          <div class="stack-item">
+            <span class="stack-category">Frontend & Audio</span>
+            <span class="stack-tech">HTML5, Modern CSS Glassmorphism, Web Speech API, Web Audio API Canvas</span>
+          </div>
+          <div class="stack-item">
+            <span class="stack-category">System & Telemetry</span>
+            <span class="stack-tech">psutil, Platform OS detection, Threading</span>
+          </div>
+          <div class="stack-item">
+            <span class="stack-category">APIs & Integrations</span>
+            <span class="stack-tech">CoinGecko REST, Wikipedia, OpenWeatherMap, RESTful Microservices</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Commands Cheatsheet Modal -->
+  <div class="modal-overlay hidden" id="commandsModalOverlay">
+    <div class="commands-modal-content">
+      <button class="modal-close-btn" id="btnCloseCommandsModal">&times;</button>
+      <div class="resume-header">
+        <span class="badge-accent">COMMAND EXPLORER</span>
+        <h2>50+ Spoken Commands Matrix</h2>
+        <p class="resume-sub">Speak naturally or type any phrase into the prompt box.</p>
+      </div>
+      <div class="commands-categories-grid">
+        <div class="cmd-cat-card">
+          <h4>💡 AI & Tech Knowledge</h4>
+          <ul>
+            <li>"Explain Quantum Computing"</li>
+            <li>"Explain Microservices"</li>
+            <li>"Explain Docker"</li>
+            <li>"Explain Big O notation"</li>
+            <li>"Explain Recursion"</li>
+          </ul>
+        </div>
+        <div class="cmd-cat-card">
+          <h4>💻 Developer Tools</h4>
+          <ul>
+            <li>"Generate code for Binary Search"</li>
+            <li>"Generate code for Quicksort"</li>
+            <li>"Generate code for Debounce"</li>
+            <li>"Generate secure password"</li>
+            <li>"Generate UUID"</li>
+            <li>"Git undo commit / stash"</li>
+            <li>"Regex for email / url"</li>
+          </ul>
+        </div>
+        <div class="cmd-cat-card">
+          <h4>⏳ Productivity & Health</h4>
+          <ul>
+            <li>"Start Pomodoro (25 mins)"</li>
+            <li>"Guided breathing (4-7-8)"</li>
+            <li>"Posture check"</li>
+            <li>"Hydration reminder"</li>
+            <li>"Set timer for 5 minutes"</li>
+          </ul>
+        </div>
+        <div class="cmd-cat-card">
+          <h4>🪙 Finance & Crypto</h4>
+          <ul>
+            <li>"Price of Bitcoin"</li>
+            <li>"Price of Ethereum"</li>
+            <li>"Price of Solana"</li>
+            <li>"Convert 100 USD to EUR"</li>
+            <li>"Convert 50 USD to INR"</li>
+          </ul>
+        </div>
+        <div class="cmd-cat-card">
+          <h4>📊 System & Telemetry</h4>
+          <ul>
+            <li>"System telemetry / specs"</li>
+            <li>"CPU and memory usage"</li>
+            <li>"Network ping status"</li>
+            <li>"Battery status"</li>
+          </ul>
+        </div>
+        <div class="cmd-cat-card">
+          <h4>🎵 Media & Ambience</h4>
+          <ul>
+            <li>"Play lofi chill beats"</li>
+            <li>"Play rain sounds"</li>
+            <li>"Play coffee shop ambience"</li>
+            <li>"Stop audio"</li>
+          </ul>
+        </div>
+        <div class="cmd-cat-card">
+          <h4>📝 Notes & Tasks</h4>
+          <ul>
+            <li>"Save note [text]"</li>
+            <li>"Read notes"</li>
+            <li>"Add todo [task]"</li>
+            <li>"Read todos"</li>
+            <li>"Export notes as Markdown"</li>
+            <li>"Clear notes"</li>
+          </ul>
+        </div>
+        <div class="cmd-cat-card">
+          <h4>🧮 Math & Units</h4>
+          <ul>
+            <li>"What is 25 times 4"</li>
+            <li>"Convert 5 km to miles"</li>
+            <li>"Convert 100 celsius to fahrenheit"</li>
+            <li>"Convert 10 gb to mb"</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+  <!-- Fallback relative link if opened directly via file:// -->
+  <script src="js/app.js"></script>
+</body>
+</html>
